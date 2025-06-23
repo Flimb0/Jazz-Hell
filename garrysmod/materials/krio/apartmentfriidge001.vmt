@@ -1,0 +1,6 @@
+"VertexLitGeneric"
+{
+	$basetexture "krio/apartmentfridge001_a"
+	$envmap "env_cubemap"
+	"$envmaptint" "[.25 .25 .25]"
+}

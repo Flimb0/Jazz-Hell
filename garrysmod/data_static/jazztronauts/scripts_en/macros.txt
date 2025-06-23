@@ -1,0 +1,114 @@
+# top-level macros for script system
+# each line is a macro that will globally replace text when used
+
+# NOTE: Be careful with these, they will replace ANY text in the scripts that match
+
+mycoolmacro value
+#   maps any usage of 'mycoolmacro' to 'value'
+
+oncat(name) *setfocus npc_cat_name*
+#   will replace any usage of 'oncat(bobby)' with '*setfocus npc_cat_bobby*'
+#   you can use argument to specify which parts can be modified
+#	MIND YOUR SPACES IN YOUR ARGUMENTS, they're included too!
+#	'oncat( bobby )'' will result in '*setfocus npc_cat_ bobby *', which would error out!
+
+complex_name(v0,v1,v2) first:v0 second:v1 compound(v2): oncat(v2)
+#   macros can have names with underscores in them, and also have multiple arguments
+#   also you can build compound macros by calling macros which were previously defined
+
+
+
+# emotion enums
+BAR_NEUTRAL setskin cat_bar 0
+BAR_BLINK setskin cat_bar 4
+BAR_HAPPY setskin cat_bar 1
+BAR_PISSED setskin cat_bar 2
+BAR_SURPRISE setskin cat_bar 3
+BAR_HISS setskin cat_bar 5
+
+PIANO_NEUTRAL setskin cat_piano 0
+PIANO_BLINK setskin cat_piano 4
+PIANO_ANGRY setskin cat_piano 2
+PIANO_FLUSTERED setskin cat_piano 3
+PIANO_RELIEF setskin cat_piano 5
+PIANO_SMIRK setskin cat_piano 1
+PIANO_HISS setskin cat_piano 6
+
+CELLO_NEUTRAL setskin cat_cello 0
+CELLO_BLINK setskin cat_cello 4
+CELLO_MAD setskin cat_cello 2
+CELLO_EMPTY setskin cat_cello 5
+CELLO_GRIN setskin cat_cello 1
+CELLO_HIGH setskin cat_cello 3
+CELLO_FEAR setskin cat_cello 6
+CELLO_HISS setskin cat_cello 7
+
+SINGER_NEUTRAL setskin cat_singer 0
+SINGER_BLINK setskin cat_singer 4
+SINGER_CRY setskin cat_singer 6
+SINGER_DEPRESSED setskin cat_singer 7
+SINGER_FLUSTERED setskin cat_singer 5
+SINGER_HAPPY setskin cat_singer 1
+SINGER_MAD setskin cat_singer 2
+SINGER_MISCHIEF setskin cat_singer 3
+SINGER_HISS setskin cat_singer 8
+
+# gesture shorthands (don't include asterisks so local macros can more nicely use them)
+AGREE(cat) setanim cat gesture_agree 1 idle
+ANGER(cat) setanim cat gesture_anger 1 idle
+CLAP(cat) setanim cat gesture_clap 1 idle
+CONFUSED(cat) setanim cat gesture_confused 1 idle
+DISAGREE(cat) setanim cat gesture_disagree 1 idle
+DRYHANDS(cat) setanim cat gesture_dryhands 1 idle
+EMBARASS(cat) setanim cat gesture_embarass 1 idle
+EXCHANGE(cat) setanim cat gesture_exchange 1 idle
+FACEPALM(cat) setanim cat gesture_facepalm 1 idle
+FOLDARMS(cat) setanim cat gesture_foldarms 1 idle
+JAB(cat) setanim cat gesture_jab 1 idle
+LAUGH(cat) setanim cat gesture_laugh 1 idle
+SHOCK(cat) setanim cat gesture_shock 1 idle
+SHRUG(cat) setanim cat gesture_shrug 1 idle
+SIGH(cat) setanim cat gesture_sigh 1 idle 
+SWEEP(cat) setanim cat gesture_sweep 1 idle
+
+
+spawnnarrator() *block spawn narrator dummy-->setnpcid narrator npc_narrator*
+spawnnarratorroot(scene_locale) *block spawn narrator dummy-->setnpcid narrator npc_narrator-->sceneroot narrator-->setlocale narrator scene_locale*
+newsceneroot(root_name,scene_locale) *block sceneroot nil-->spawn root_name dummy-->setlocale root_name scene_locale-->sceneroot root_name*
+
+# Old models, leaving them in for backwards compatibility
+spawnbartender() *spawn cat_bar models/andy/bartender/cat_bartender.mdl**setnpcid cat_bar npc_cat_bar**BAR_NEUTRAL**setanim cat_bar idle*
+spawnpianist() *spawn cat_piano models/andy/pianist/cat_pianist.mdl**setnpcid cat_piano npc_cat_piano**PIANO_NEUTRAL**setanim cat_piano idle*
+spawncellist() *spawn cat_cello models/andy/cellist/cat_cellist.mdl**setnpcid cat_cello npc_cat_cello**CELLO_NEUTRAL**setanim cat_cello idle*
+spawnsinger() *spawn cat_singer models/andy/singer/cat_singer.mdl**setnpcid cat_singer npc_cat_sing**SINGER_NEUTRAL**setanim cat_singer idle*
+spawngang() spawncellist()spawnbartender()spawnpianist()spawnsinger()spawnnarrator()
+
+# New models, use these if making new scripts
+spawncatbartender() *block spawn cat_bar models/andy/cats/cat_bartender.mdl-->setnpcid cat_bar npc_cat_bar-->BAR_NEUTRAL-->setanim cat_bar idle*
+spawncatpianist() *block spawn cat_piano models/andy/cats/cat_pianist.mdl-->setnpcid cat_piano npc_cat_piano-->PIANO_NEUTRAL-->setanim cat_piano idle*
+spawncatcellist() *block spawn cat_cello models/andy/cats/cat_cellist.mdl-->setnpcid cat_cello npc_cat_cello-->CELLO_NEUTRAL-->setanim cat_cello idle*
+spawncatsinger() *block spawn cat_singer models/andy/cats/cat_singer.mdl-->setnpcid cat_singer npc_cat_sing-->SINGER_NEUTRAL-->setanim cat_singer idle*
+
+spawncats() spawncatcellist()spawncatbartender()spawncatpianist()spawncatsinger()spawnnarrator()
+spawncatsrooted(scene_locale) spawnnarratorroot(scene_locale)spawncatcellist()spawncatbartender()spawncatpianist()spawncatsinger()
+
+VOIDCAT_VOID setskin cat_void 0
+VOIDCAT_ASH setskin cat_void 1
+
+spawncatvoid() *block spawn cat_void models/andy/cats/cat_all.mdl-->setnpcid cat_void npc_cat_void-->VOIDCAT_VOID-->setanim cat_void idle*
+spawncatash() *block spawn cat_void models/andy/cats/cat_all.mdl-->setnpcid cat_void npc_cat_ash-->VOIDCAT_ASH-->setanim cat_void idle*
+
+# commands
+narratewithview(subject) *block setspeaker narrator-->overrideportrait subject*
+narratesinger() narratewithview(cat_singer)
+
+# chat colors
+NGPLUSCOLOR 0 200 0
+420COLOR 0 155 0
+ASIDECOLOR 176
+OOC c 176
+
+# layers
+LAYER_BASE 1
+LAYER_ABOVE 2
+LAYER_BELOW 3

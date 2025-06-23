@@ -1,0 +1,6 @@
+UnlitGeneric
+{
+	$basetexture "ui/transition_horse"
+	$vertexcolor 1
+	$vertexalpha 1
+}

@@ -1,0 +1,7 @@
+"UnlitGeneric"
+{
+	"$basetexture" "models/sunabouzu/jazzlily"
+	$additive 1
+	"$nodecal" 1
+	$nocull	1
+}
