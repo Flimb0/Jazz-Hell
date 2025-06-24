@@ -1,4 +1,0 @@
-nocompress 1
-nonice	1
-clamps 1
-clampt 1
